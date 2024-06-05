@@ -95,6 +95,36 @@ describe("Database Relationships", () => {
     expect(user.role).toBe("Super Admin");
   });
 
+  test("Inner join", () => {
+    const [user] = query
+      .select("users.name", "roles.name as role")
+      .from("users")
+      .join("roles", "users.role_id = roles.id")
+      .where("users.name = ?", ["John Doe"])
+      .execute();
+    expect(user.role).toBe("Super Admin");
+  });
+
+  test("Right join", () => {
+    const [user] = query
+      .select("users.name", "roles.name as role")
+      .from("users")
+      .rightJoin("roles", "users.role_id = roles.id")
+      .where("users.name = ?", ["John Doe"])
+      .execute();
+    expect(user.role).toBe("Super Admin");
+  });
+
+  test("Left join", () => {
+    const [user] = query
+      .select("users.name", "roles.name as role")
+      .from("users")
+      .leftJoin("roles", "users.role_id = roles.id")
+      .where("users.name = ?", ["John Doe"])
+      .execute();
+    expect(user.role).toBe("Super Admin");
+  });
+
   test("Delete data", () => {
     query.deleteFrom("users").execute();
     query.deleteFrom("roles").execute();
