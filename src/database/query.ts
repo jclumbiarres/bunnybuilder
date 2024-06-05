@@ -1,6 +1,22 @@
 import { Database } from "bun:sqlite";
 
-export class Query {
+interface IQuery {
+  select(...campos: string[]): this;
+  from(tabla: string): this;
+  where(condicion: string, params: any[]): this;
+  insertInto(table: string, fields: string[], values: any[]): this;
+  update(table: string): this;
+  set(fields: string[], values: any[]): this;
+  deleteFrom(table: string): this;
+  leftJoin(table: string, condition: string): this;
+  rightJoin(table: string, condition: string): this;
+  join(table: string, condition: string): this;
+  build(): string;
+  execute(): any;
+  close(): void;
+}
+
+export class Query implements IQuery {
   private query: string[] = [];
   private params: any[] = [];
   private db: Database;
