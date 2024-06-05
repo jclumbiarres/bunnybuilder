@@ -59,11 +59,6 @@ describe("Database CRUD", () => {
 });
 
 describe("Database Relationships", () => {
-  beforeAll(() => {
-    db = new Database(":memory:");
-    query = new Query(db);
-  });
-
   test("Create tables", () => {
     db.exec(
       "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, role_id INTEGER)"
