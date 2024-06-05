@@ -100,6 +100,16 @@ describe("Database Relationships", () => {
     expect(user.role).toBe("Super Admin");
   });
 
+  test("Join with where", () => {
+    const [user] = query
+      .select("users.name", "roles.name as role")
+      .from("users")
+      .join("roles", "users.role_id = roles.id")
+      .where("users.name = ? AND roles.name = ?", ["John Doe", "Super Admin"])
+      .execute();
+    expect(user.role).toBe("Super Admin");
+  });
+
   test("Right join", () => {
     const [user] = query
       .select("users.name", "roles.name as role")
