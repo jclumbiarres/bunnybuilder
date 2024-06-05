@@ -52,6 +52,22 @@ export class Query {
     this.query.push(`DELETE FROM ${table}`);
     return this;
   }
+  // Relationship
+
+  leftJoin(table: string, condition: string): this {
+    this.query.push(`LEFT JOIN ${table} ON ${condition}`);
+    return this;
+  }
+
+  rightJoin(table: string, condition: string): this {
+    this.query.push(`RIGHT JOIN ${table} ON ${condition}`);
+    return this;
+  }
+
+  join(table: string, condition: string): this {
+    this.query.push(`JOIN ${table} ON ${condition}`);
+    return this;
+  }
 
   // utils
   build(): string {
