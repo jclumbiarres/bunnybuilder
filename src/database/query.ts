@@ -80,6 +80,11 @@ export class Query implements IQuery {
     return this;
   }
 
+  innerJoin(table: string, condition: string): this {
+    this.query.push(`INNER JOIN ${table} ON ${condition}`);
+    return this;
+  }
+
   join(table: string, condition: string): this {
     this.query.push(`JOIN ${table} ON ${condition}`);
     return this;

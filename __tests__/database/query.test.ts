@@ -94,7 +94,7 @@ describe("Database Relationships", () => {
     const [user] = query
       .select("users.name", "roles.name as role")
       .from("users")
-      .join("roles", "users.role_id = roles.id")
+      .innerJoin("roles", "users.role_id = roles.id")
       .where("users.name = ?", ["John Doe"])
       .execute();
     expect(user.role).toBe("Super Admin");
