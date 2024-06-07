@@ -33,9 +33,6 @@ export class QueryBuilder implements IQuery {
   constructor(db: Database) {
     this.db = db;
     this.db.exec("PRAGMA journal_mode = WAL;");
-    this.db.exec(
-      "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, message TEXT);"
-    );
   }
   // Queries
   select(...campos: string[]): this {
