@@ -8,6 +8,7 @@ interface IQuery {
   update(table: string): this;
   set(fields: string[], values: any[]): this;
   deleteFrom(table: string): this;
+  innerJoin(table: string, condition: string): this;
   leftJoin(table: string, condition: string): this;
   rightJoin(table: string, condition: string): this;
   join(table: string, condition: string): this;
@@ -16,7 +17,15 @@ interface IQuery {
   close(): void;
 }
 
-export class Query implements IQuery {
+class QBuilderErr extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "QueryBuilderError";
+    this.message = message;
+  }
+}
+
+export class QueryBuilder implements IQuery {
   private query: string[] = [];
   private params: any[] = [];
   private db: Database;
@@ -24,6 +33,9 @@ export class Query implements IQuery {
   constructor(db: Database) {
     this.db = db;
     this.db.exec("PRAGMA journal_mode = WAL;");
+    this.db.exec(
+      "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, message TEXT);"
+    );
   }
   // Queries
   select(...campos: string[]): this {
@@ -96,12 +108,20 @@ export class Query implements IQuery {
   }
 
   execute(): any {
-    const query = this.build();
-    const sql = this.db.query(query);
-    const output = sql.all(...this.params);
-    this.query = [];
-    this.params = [];
-    return output;
+    try {
+      const query = this.build();
+      const sql = this.db.query(query);
+      const output = sql.all(...this.params);
+      this.query = [];
+      this.params = [];
+      return output;
+    } catch (error) {
+      if (error instanceof QBuilderErr) {
+        throw new QBuilderErr(error.message);
+      } else {
+        throw new QBuilderErr("Error in the query");
+      }
+    }
   }
 
   close(): void {

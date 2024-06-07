@@ -1,7 +1,7 @@
 import { expect, test, beforeAll, describe, afterAll } from "bun:test";
 import { Database } from "bun:sqlite";
 
-import { Query } from "../../src/database/query";
+import { QueryBuilder as Query } from "../../src/database/query";
 
 let query: Query;
 let db: Database;
