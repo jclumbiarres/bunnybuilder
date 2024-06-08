@@ -12,6 +12,8 @@ interface IQuery {
   leftJoin(table: string, condition: string): this;
   rightJoin(table: string, condition: string): this;
   join(table: string, condition: string): this;
+  createTable(name: string, fields: string[]): void;
+  dropTable(name: string): void;
   build(): string;
   execute(): any;
   close(): void;
@@ -102,6 +104,19 @@ export class QueryBuilder implements IQuery {
   // utils
   build(): string {
     return this.query.join(" ");
+  }
+
+  // Tables
+  createTable(name: string, fields: string[]): void {
+    this.query.push(
+      `CREATE TABLE IF NOT EXISTS ${name} (${fields.join(", ")});`
+    );
+    this.execute();
+  }
+
+  dropTable(name: string): void {
+    this.query.push(`DROP TABLE IF EXISTS ${name};`);
+    this.execute();
   }
 
   execute(): any {
