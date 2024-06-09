@@ -6,7 +6,6 @@ Small SQLite3 query builder for [Bun](https://bun.sh)
 
 ```ts
 import { QueryBuilder } from "./database/query";
-
 import { Database } from "bun:sqlite";
 
 const dbconn = new QueryBuilder(new Database("db.sqlite"));
@@ -17,10 +16,12 @@ export const databaseInit = (db: QueryBuilder) => {
     "name TEXT",
     "password TEXT",
   ]);
+
   db.createTable("channels", [
     "id INTEGER PRIMARY KEY AUTOINCREMENT",
     "name TEXT",
   ]);
+
   db.createTable("messages", [
     "id INTEGER PRIMARY KEY AUTOINCREMENT",
     "message TEXT",
@@ -30,17 +31,21 @@ export const databaseInit = (db: QueryBuilder) => {
     "channel INTEGER",
     "FOREIGN KEY(channel) REFERENCES channels(id)",
   ]);
+
   db.insertInto("channels", ["name"], ["general"]).execute();
+
   db.insertInto(
     "users",
     ["name", "password"],
     ["Joe Bananas", "12345"]
   ).execute();
+
   db.insertInto(
     "users",
     ["name", "password"],
     ["Crazy Gallo", "12345"]
   ).execute();
+
   db.insertInto(
     "messages",
     ["message", "date", "sender", "receiver", "channel"],
@@ -59,6 +64,7 @@ export const databaseInit = (db: QueryBuilder) => {
     .execute();
 
   console.log(querySample);
+
   db.close();
 };
 
