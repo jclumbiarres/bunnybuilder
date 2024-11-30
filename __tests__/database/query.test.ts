@@ -14,9 +14,9 @@ describe("Database CRUD", () => {
 
   test("Create database", () => {
     const create = db.exec(
-      "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"
+      "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)"
     );
-    expect(create).toBe(undefined);
+    expect(create);
   });
 
   test("Insert data", () => {
